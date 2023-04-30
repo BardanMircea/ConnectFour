@@ -47,7 +47,7 @@ const gameLoop = () => {
     }
 
     // ckeck for end game conditions
-    let outcome = checkBoard(board);
+    const outcome = checkBoard(board);
 
     switch (outcome) {
       case "Y":
