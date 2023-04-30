@@ -9,7 +9,7 @@ I will code a small Connect Four program, that allows two people to play the gam
 
 To do so, we need several things:
 
-We need a grid -> we will create a 2D array that starts out empty
-We will display that grid to players
-Players will take turns giving their move
+We need a grid (a 2D array) that starts out empty.
+We will display that grid to players.
+Players will take turns giving their move.
 At each turn, we'll check if we have reached a winning condition or a draw. If not, we'll keep playing.
