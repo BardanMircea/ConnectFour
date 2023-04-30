@@ -62,11 +62,10 @@ const gameLoop = () => {
         printBoard(board);
         console.log("Nobody won today.");
         return;
+      case "Pending": // if no end game condition is satisfied, print the current board and switch turns
+        printBoard(board);
+        piece = piece === "R" ? "Y" : "R";
     }
-
-    // if no end game condition is satisfied, print the current board and switch turns
-    printBoard(board);
-    piece = piece === "R" ? "Y" : "R";
   }
 };
 
