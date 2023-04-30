@@ -1,68 +1,73 @@
-const {printBoard, putPiece, checkBoard} = require('./board')
-const prompt = require('prompt-sync')({sigint: true });
-
+const { printBoard, putPiece, checkBoard } = require("./board");
+const prompt = require("prompt-sync")({ sigint: true });
 
 const gameLoop = () => {
-    // create an empty board
-    let board = [
-        ["-", "-", "-", "-", "-", "-", "-"],
-        ["-", "-", "-", "-", "-", "-", "-"],
-        ["-", "-", "-", "-", "-", "-", "-"],
-        ["-", "-", "-", "-", "-", "-", "-"],
-        ["-", "-", "-", "-", "-", "-", "-"],
-        ["-", "-", "-", "-", "-", "-", "-"]
-    ]
+  // create an empty board
+  let board = [
+    ["-", "-", "-", "-", "-", "-", "-"],
+    ["-", "-", "-", "-", "-", "-", "-"],
+    ["-", "-", "-", "-", "-", "-", "-"],
+    ["-", "-", "-", "-", "-", "-", "-"],
+    ["-", "-", "-", "-", "-", "-", "-"],
+    ["-", "-", "-", "-", "-", "-", "-"],
+  ];
 
-    // start game
-    console.log("Game started");
-    printBoard(board);
+  // start game
+  console.log("Game started");
+  printBoard(board);
 
-    // ask the players for the piece that goes first
-    const redOrYellow = ["R", "Y"];
-    let piece = prompt("Enter first move (R / Y): ").toUpperCase();                       
+  // ask the players for the piece that goes first
+  const redOrYellow = ["R", "Y"];
+  let piece = prompt("Enter first move (R / Y): ").toUpperCase();
 
-    // check if piece is valid (only 'R' or 'Y' allowed)
-    while(!redOrYellow.includes(piece)){
-        piece = prompt(`Invalid move. Try again. Enter next move (R / Y)?`).toUpperCase()
+  // check if piece is valid (only 'R' or 'Y' allowed)
+  while (!redOrYellow.includes(piece)) {
+    piece = prompt(
+      `Invalid move. Try again. Enter next move (R / Y)?`
+    ).toUpperCase();
+  }
+
+  // if starting piece is validated, begin the game loop
+  while (true) {
+    // ask the current player for his move
+    let position = prompt(`Next move is ${piece}. In which column does it go?`);
+
+    // check if the move is possible
+    let isPiecePut = putPiece(board, piece, position);
+
+    // if move impossible, ask for a valid move
+    while (
+      position > board[0].length - 1 ||
+      isNaN(position) ||
+      position < 0 ||
+      !isPiecePut
+    ) {
+      position = prompt(`Invalid move. Try again. In which column does it go?`);
+      isPiecePut = putPiece(board, piece, position);
     }
 
-    // if starting piece is validated, begin the game loop 
-    while(true){
+    // ckeck for end game conditions
+    let outcome = checkBoard(board);
 
-        // ask the current player for his move
-        let position = prompt(`Next move is ${piece}. In which column does it go?`)
-
-        // check if the move is possible
-        let isPiecePut = putPiece(board, piece, position)
-
-        // if move impossible, ask for a valid move
-        while(position > board[0].length-1 || isNaN(position) || position < 0 || !isPiecePut){
-            position = prompt(`Invalid move. Try again. In which column does it go?`)
-            isPiecePut = putPiece(board, piece, position)
-        }
-
-        // ckeck for end game conditions
-        outcome = checkBoard(board)
-
-        switch(outcome) {
-            case "Y": 
-                    printBoard(board)
-                    console.log("Y won the game!")
-                    return;
-            case "R": 
-                    printBoard(board)
-                    console.log("R won the game!")
-                    return;
-            case "Draw": 
-                    printBoard(board)
-                    console.log("Nobody won today.")
-                    return;         
-        }
-
-        // if no end game condition is satisfied, print the current board and switch turns
+    switch (outcome) {
+      case "Y":
         printBoard(board);
-        piece = piece === "R"? "Y" : "R"
+        console.log("Y won the game!");
+        return;
+      case "R":
+        printBoard(board);
+        console.log("R won the game!");
+        return;
+      case "Draw":
+        printBoard(board);
+        console.log("Nobody won today.");
+        return;
     }
-}
+
+    // if no end game condition is satisfied, print the current board and switch turns
+    printBoard(board);
+    piece = piece === "R" ? "Y" : "R";
+  }
+};
 
 gameLoop();
