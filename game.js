@@ -46,27 +46,35 @@ const gameLoop = () => {
       isPiecePut = putPiece(board, piece, position);
     }
 
-    // ckeck for end game conditions
-    const outcome = checkBoard(board);
-
-    switch (outcome) {
-      case "Y":
-        printBoard(board);
-        console.log("Y won the game!");
-        return;
-      case "R":
-        printBoard(board);
-        console.log("R won the game!");
-        return;
-      case "Draw":
-        printBoard(board);
-        console.log("Nobody won today.");
-        return;
-      case "Pending": // if no end game condition is satisfied, print the current board and switch turns
-        printBoard(board);
-        piece = piece === "R" ? "Y" : "R";
-    }
+    // check the turn outcome
+    piece = checkTurnOutcome(outcome, board, piece);
+    if (piece === undefined) {
+      // if the piece is not switched, an endgame condition was satisfied upon calling checkTurnOutcome(), so we return
+      return;
+    } // else, the game is still Pending, so the game loop continues
   }
 };
 
 gameLoop();
+
+//function to check if game continues or ends
+function checkTurnOutcome(outcome, board, piece) {
+  switch (outcome) {
+    case "Y":
+      printBoard(board);
+      console.log("Y won the game!");
+      return;
+    case "R":
+      printBoard(board);
+      console.log("R won the game!");
+      return;
+    case "Draw":
+      printBoard(board);
+      console.log("Nobody won today.");
+      return;
+    case "Pending": // if no end game condition is satisfied, print the current board and switch turns
+      printBoard(board);
+      piece = piece === "R" ? "Y" : "R";
+      return piece;
+  }
+}
